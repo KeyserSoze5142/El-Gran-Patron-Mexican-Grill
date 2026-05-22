@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Gran Fiesta Mexican Restaurant – Tuscaloosa, AL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:#c0392b; --red-deep:#8b1a12; --gold:#d4a017; --gold-lt:#f0c040;
+      --cream:#fdf6e3; --cream-dk:#f4e8c1; --green:#2e7d32; --green-lt:#43a047;
+      --brown:#4e2c0e; --text:#2a1a07; --muted:#6b4c2a; --border:#d9c49a;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); overflow-x:hidden; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(20,6,0,0.96); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:space-between; padding:0 5%; height:64px; border-bottom:2px solid var(--gold); }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--gold-lt); text-decoration:none; line-height:1.1; }
+    .nav-logo span { display:block; font-size:0.65rem; font-weight:400; color:#ccc; letter-spacing:0.1em; text-transform:uppercase; }
+    .nav-links { display:flex; gap:1.6rem; list-style:none; }
+    .nav-links a { color:#f0e6cc; text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--gold-lt); }
+    .nav-order { background:var(--red); color:#fff !important; padding:6px 16px; border-radius:4px; }
+    .nav-order:hover { background:var(--red-deep) !important; }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--gold-lt); border-radius:2px; }
+    .mobile-menu { display:none; position:fixed; top:64px; left:0; right:0; z-index:999; background:rgba(20,6,0,0.98); padding:1rem 0; border-bottom:2px solid var(--gold); flex-direction:column; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { color:#f0e6cc; text-decoration:none; padding:14px 5%; font-size:1rem; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; border-bottom:1px solid rgba(255,255,255,0.07); }
+    .mobile-menu a:hover { background:rgba(255,255,255,0.06); color:var(--gold-lt); }
+
+    /* HERO */
+    .hero { min-height:100vh; background:linear-gradient(to bottom,rgba(15,4,0,0.72) 0%,rgba(30,8,0,0.55) 60%,rgba(15,4,0,0.82) 100%),url('https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1400&q=80') center/cover no-repeat; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:100px 5% 60px; position:relative; }
+    .hero-badge { font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:600; color:var(--gold-lt); border:1px solid var(--gold); padding:5px 18px; border-radius:20px; margin-bottom:1.5rem; display:inline-block; animation:fadeUp 0.6s ease both; }
+    .hero h1 { font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(2.8rem,8vw,6rem); line-height:1.0; color:#fff; margin-bottom:0.3rem; animation:fadeUp 0.7s 0.1s ease both; }
+    .hero h1 em { color:var(--gold-lt); font-style:italic; }
+    .hero-sub { font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(1rem,2.5vw,1.4rem); color:#e8d9bb; margin-bottom:2rem; animation:fadeUp 0.7s 0.2s ease both; }
+    .hero-pills { display:flex; gap:0.7rem; flex-wrap:wrap; justify-content:center; margin-bottom:2.5rem; animation:fadeUp 0.7s 0.3s ease both; }
+    .hero-pill { font-size:0.78rem; letter-spacing:0.05em; font-weight:500; padding:6px 16px; border-radius:20px; background:rgba(255,255,255,0.1); color:#f0e6cc; border:1px solid rgba(255,255,255,0.2); }
+    .hero-ctas { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; animation:fadeUp 0.7s 0.4s ease both; }
+    .hero-scroll { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.4); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; animation:bounce 2s infinite; cursor:pointer; }
+    .hero-scroll::after { content:'▼'; display:block; text-align:center; margin-top:4px; font-size:0.6rem; }
+
+    /* BUTTONS */
+    .btn { display:inline-flex; align-items:center; gap:0.4rem; padding:14px 30px; border-radius:4px; font-size:0.88rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none; transition:all 0.2s; cursor:pointer; border:none; font-family:'DM Sans',sans-serif; }
+    .btn-primary { background:var(--red); color:#fff; }
+    .btn-primary:hover { background:var(--red-deep); transform:translateY(-1px); }
+    .btn-outline { background:transparent; color:#fff; border:2px solid var(--gold); }
+    .btn-outline:hover { background:var(--gold); color:var(--brown); }
+    .btn-gold { background:var(--gold); color:var(--brown); }
+    .btn-gold:hover { background:var(--gold-lt); }
+
+    /* SECTIONS */
+    section { padding:80px 5%; }
+    .section-label { font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:600; color:var(--red); margin-bottom:0.5rem; }
+    .section-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900; color:var(--brown); line-height:1.1; margin-bottom:1rem; }
+    .section-title em { font-style:italic; color:var(--red); }
+    .divider { width:50px; height:3px; background:var(--gold); margin:1rem 0 2rem; }
+    .divider.center { margin:1rem auto 2rem; }
+
+    /* ABOUT */
+    #about { background:var(--cream); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; max-width:1100px; margin:0 auto; }
+    .about-img-wrap { position:relative; }
+    .about-img { width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:4px; box-shadow:12px 12px 0 var(--gold); }
+    .about-badge { position:absolute; bottom:-20px; right:-20px; background:var(--red); color:#fff; width:100px; height:100px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:'Playfair Display',serif; box-shadow:0 4px 20px rgba(0,0,0,0.25); }
+    .about-badge strong { font-size:1.8rem; line-height:1; }
+    .about-badge span { font-size:0.62rem; letter-spacing:0.05em; }
+    .about-text p { font-family:'Libre Baskerville',serif; font-size:1rem; line-height:1.8; color:var(--muted); margin-bottom:1.2rem; }
+    .about-stats { display:flex; gap:2rem; margin-top:2rem; flex-wrap:wrap; }
+    .stat strong { display:block; font-size:1.8rem; font-family:'Playfair Display',serif; color:var(--red); }
+    .stat span { font-size:0.78rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); }
+
+    /* HOURS */
+    #hours { background:var(--brown); color:#fff; }
+    .hours-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:2.5rem; max-width:1000px; margin:0 auto; }
+    .hours-card { background:rgba(255,255,255,0.07); border-radius:6px; padding:2rem; border:1px solid rgba(255,255,255,0.1); }
+    .hours-card h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--gold-lt); margin-bottom:1.2rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.7rem; }
+    .hours-row { display:flex; justify-content:space-between; padding:6px 0; font-size:0.9rem; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .hours-row .day { color:#ccc; }
+    .hours-row .time { color:#fff; font-weight:500; }
+    .hours-row.today .day, .hours-row.today .time { color:var(--gold-lt); font-weight:600; }
+    .contact-info a { color:#ddd; text-decoration:none; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.7rem; font-size:0.9rem; }
+    .contact-info a:hover { color:var(--gold-lt); }
+    #hours .section-label { color:var(--gold); }
+    #hours .section-title { color:#fff; }
+    #hours .divider { background:var(--gold); }
+
+    /* SPECIALS */
+    #specials { background:var(--cream-dk); }
+    .specials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; max-width:1200px; margin:0 auto; }
+    .special-card { background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 2px 15px rgba(0,0,0,0.07); transition:transform 0.2s,box-shadow 0.2s; border-top:4px solid var(--red); }
+    .special-card:hover { transform:translateY(-4px); box-shadow:0 8px 30px rgba(0,0,0,0.12); }
+    .special-card.green { border-top-color:var(--green); }
+    .special-card.gold  { border-top-color:var(--gold); }
+    .special-card.brown { border-top-color:var(--brown); }
+    .special-card.blue  { border-top-color:#1565c0; }
+    .special-head { padding:1.4rem 1.4rem 0; display:flex; justify-content:space-between; align-items:flex-start; }
+    .special-day { font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; font-weight:700; color:var(--red); }
+    .special-card.green .special-day { color:var(--green); }
+    .special-card.gold  .special-day { color:var(--gold); }
+    .special-card.brown .special-day { color:var(--brown); }
+    .special-card.blue  .special-day { color:#1565c0; }
+    .special-emoji { font-size:2rem; }
+    .special-body { padding:0.5rem 1.4rem 1.4rem; }
+    .special-body h3 { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--text); margin-bottom:0.5rem; }
+    .special-body p { font-size:0.85rem; color:var(--muted); line-height:1.6; }
+    .special-discount { display:inline-block; margin-top:0.7rem; background:var(--cream); color:var(--red); font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:3px; letter-spacing:0.04em; }
+    .special-card.green .special-discount { color:var(--green); }
+    .special-card.gold  .special-discount { color:#9e7000; }
+    .special-card.blue  .special-discount { color:#1565c0; }
+
+    /* GALLERY */
+    #gallery { background:#1a0800; padding-bottom:60px; }
+    #gallery .section-label { color:var(--gold); }
+    #gallery .section-title { color:#fff; }
+    #gallery .divider { background:var(--gold); }
+    .gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:1100px; margin:0 auto; }
+    .gallery-item { overflow:hidden; border-radius:4px; position:relative; }
+    .gallery-item.tall { grid-row:span 2; }
+    .gallery-item.wide { grid-column:span 2; }
+    .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s; min-height:180px; }
+    .gallery-item:hover img { transform:scale(1.05); }
+    .gallery-item .overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 60%); opacity:0; transition:opacity 0.3s; display:flex; align-items:flex-end; padding:1rem; }
+    .gallery-item:hover .overlay { opacity:1; }
+    .overlay-text { color:#fff; font-size:0.8rem; font-weight:500; }
+
+    /* MENU */
+    #menu { background:var(--cream); }
+    .menu-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:2.5rem; }
+    .menu-tab { padding:9px 22px; border-radius:4px; font-size:0.82rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer; border:2px solid var(--border); background:#fff; color:var(--muted); transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+    .menu-tab.active { background:var(--red); color:#fff; border-color:var(--red); }
+    .menu-tab:hover:not(.active) { border-color:var(--red); color:var(--red); }
+    .menu-panel { display:none; }
+    .menu-panel.active { display:block; }
+    .menu-section-title { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--brown); margin:2rem 0 1rem; padding-bottom:0.5rem; border-bottom:2px solid var(--cream-dk); display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+    .menu-section-title .badge { font-size:0.65rem; letter-spacing:0.1em; background:var(--cream-dk); color:var(--muted); padding:2px 8px; border-radius:3px; font-family:'DM Sans',sans-serif; text-transform:uppercase; }
+    .menu-items { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0; }
+    .menu-item { display:flex; justify-content:space-between; align-items:flex-start; padding:0.9rem 0; border-bottom:1px solid var(--border); gap:1rem; }
+    .menu-item:last-child { border-bottom:none; }
+    .item-info { flex:1; }
+    .item-name { font-weight:600; font-size:0.92rem; color:var(--text); margin-bottom:2px; }
+    .item-desc { font-size:0.78rem; color:var(--muted); line-height:1.5; }
+    .item-price { font-weight:700; color:var(--red); font-size:0.95rem; white-space:nowrap; flex-shrink:0; }
+    .menu-note { margin-top:1.5rem; padding:1rem 1.5rem; background:var(--cream-dk); border-left:3px solid var(--gold); border-radius:4px; font-size:0.82rem; color:var(--muted); font-style:italic; }
+    .menu-cta-row { text-align:center; margin-top:3rem; }
+
+    /* REVIEWS */
+    #reviews { background:var(--cream-dk); }
+    .reviews-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto; }
+    .review-card { background:#fff; padding:1.8rem; border-radius:6px; box-shadow:0 2px 15px rgba(0,0,0,0.06); }
+    .stars { color:var(--gold); font-size:1rem; margin-bottom:0.8rem; }
+    .review-text { font-family:'Libre Baskerville',serif; font-size:0.88rem; line-height:1.7; color:var(--muted); font-style:italic; margin-bottom:1rem; }
+    .review-author { font-size:0.78rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--brown); }
+    .review-source { font-size:0.72rem; color:#aaa; margin-top:2px; }
+
+    /* FIND US */
+    #find-us { background:#fff; }
+    .find-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; max-width:1100px; margin:0 auto; }
+    .map-embed { border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+    .map-embed iframe { width:100%; height:380px; border:none; display:block; }
+    .find-info h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--brown); margin:1.5rem 0 0.5rem; }
+    .find-info p, .find-info a { font-size:0.92rem; color:var(--muted); line-height:1.7; text-decoration:none; }
+    .find-info a:hover { color:var(--red); }
+    .social-row { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem; }
+    .social-btn { display:flex; align-items:center; gap:0.5rem; padding:10px 18px; border-radius:4px; font-size:0.82rem; font-weight:600; text-decoration:none; letter-spacing:0.04em; transition:all 0.2s; }
+    .social-fb  { background:#1877f2; color:#fff; }
+    .social-fb:hover  { background:#1258b5; }
+    .social-ig  { background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); color:#fff; }
+    .social-ig:hover  { opacity:0.9; }
+    .social-dd  { background:#ff3008; color:#fff; }
+    .social-dd:hover  { background:#d42800; }
+    .social-yelp { background:#d32323; color:#fff; }
+    .social-yelp:hover { background:#a81b1b; }
+    .order-btns { margin-top:1rem; display:flex; gap:0.8rem; flex-wrap:wrap; }
+
+    /* FOOTER */
+    footer { background:#0e0300; color:#aaa; text-align:center; padding:2.5rem 5%; font-size:0.8rem; line-height:1.9; }
+    footer strong { color:var(--gold-lt); font-family:'Playfair Display',serif; font-size:1rem; }
+    footer a { color:var(--gold); text-decoration:none; }
+    footer a:hover { color:var(--gold-lt); }
+    .footer-social { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:1rem 0; }
+    .footer-social a { width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:1rem; text-decoration:none; transition:background 0.2s; }
+    .footer-social a:hover { background:var(--gold); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+    @media (max-width:900px) {
+      .about-grid { grid-template-columns:1fr; gap:3rem; }
+      .about-img-wrap { max-width:480px; }
+      .find-grid { grid-template-columns:1fr; }
+      .gallery-grid { grid-template-columns:repeat(2,1fr); }
+      .gallery-item.wide { grid-column:span 1; }
+      .gallery-item.tall { grid-row:span 1; }
+    }
+    @media (max-width:680px) {
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+      section { padding:60px 5%; }
+      .about-badge { width:80px; height:80px; bottom:-12px; right:-12px; }
+      .about-badge strong { font-size:1.4rem; }
+      .menu-items { grid-template-columns:1fr; }
+      .hours-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width:420px) { .gallery-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#home">La Gran Fiesta<span>Mexican Restaurant · Tuscaloosa, AL</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#specials">Specials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#find-us">Find Us</a></li>
+    <li><a href="https://order.online/en-US/store/la-gran-fiesta-mexican-restaurant-highway-69-24533493" target="_blank" class="nav-order">Order Online</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#hours" onclick="closeMobile()">Hours</a>
+  <a href="#specials" onclick="closeMobile()">Specials</a>
+  <a href="#gallery" onclick="closeMobile()">Gallery</a>
+  <a href="#menu" onclick="closeMobile()">Menu</a>
+  <a href="#find-us" onclick="closeMobile()">Find Us</a>
+  <a href="https://order.online/en-US/store/la-gran-fiesta-mexican-restaurant-highway-69-24533493" target="_blank">Order Online 🌮</a>
+</div>
+
+<section id="home" class="hero">
+  <div class="hero-badge">🌶 Tuscaloosa's Favorite Mexican Since 1997</div>
+  <h1>La Gran <em>Fiesta</em></h1>
+  <p class="hero-sub">Authentic Mexican Cuisine · Family-Owned &amp; Operated</p>
+  <div class="hero-pills">
+    <span class="hero-pill">Dine In</span>
+    <span class="hero-pill">Takeout</span>
+    <span class="hero-pill">Full Bar</span>
+    <span class="hero-pill">Kids Menu</span>
+    <span class="hero-pill">Happy Hour</span>
+  </div>
+  <div class="hero-ctas">
+    <a href="#menu" class="btn btn-primary">View Full Menu</a>
+    <a href="https://order.online/en-US/store/la-gran-fiesta-mexican-restaurant-highway-69-24533493" target="_blank" class="btn btn-gold">Order Online</a>
+    <a href="tel:2053458871" class="btn btn-outline">📞 Call Us</a>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Scroll</div>
+</section>
+
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap">
+      <img class="about-img" src="https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?w=700&q=80" alt="Colorful Mexican dining interior" loading="lazy" />
+      <div class="about-badge"><strong>27+</strong><span>Years Serving Tuscaloosa</span></div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title">¡Bienvenidos a La Gran <em>Fiesta!</em></h2>
+      <div class="divider"></div>
+      <p>For over 27 years, La Gran Fiesta has been bringing the bold, vibrant flavors of Mexico to the heart of Tuscaloosa. We're a family-owned restaurant committed to serving the freshest ingredients, made-from-scratch salsas, and recipes passed down through generations.</p>
+      <p>Whether you're stopping in for our legendary Cheese Dip, a plate of sizzling Fajitas Tradicionales, or an ice-cold margarita on a Friday night — you'll always be welcomed like family here.</p>
+      <div class="about-stats">
+        <div class="stat"><strong>4.4★</strong><span>Google Rating</span></div>
+        <div class="stat"><strong>740+</strong><span>Reviews</span></div>
+        <div class="stat"><strong>27+</strong><span>Years in Business</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hours">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <div class="section-label">Come See Us</div>
+    <h2 class="section-title" style="color:#fff;">Hours &amp; <em>Contact</em></h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="hours-grid">
+    <div class="hours-card">
+      <h3>🕐 Hours of Operation</h3>
+      <div class="hours-row" data-day="monday"><span class="day">Monday</span><span class="time">11:00 AM – 9:30 PM</span></div>
+      <div class="hours-row" data-day="tuesday"><span class="day">Tuesday</span><span class="time">11:00 AM – 9:30 PM</span></div>
+      <div class="hours-row" data-day="wednesday"><span class="day">Wednesday</span><span class="time">11:00 AM – 9:30 PM</span></div>
+      <div class="hours-row" data-day="thursday"><span class="day">Thursday</span><span class="time">11:00 AM – 9:30 PM</span></div>
+      <div class="hours-row" data-day="friday"><span class="day">Friday</span><span class="time">11:00 AM – 10:00 PM</span></div>
+      <div class="hours-row" data-day="saturday"><span class="day">Saturday</span><span class="time">11:00 AM – 10:00 PM</span></div>
+      <div class="hours-row" data-day="sunday"><span class="day">Sunday</span><span class="time">11:00 AM – 9:00 PM</span></div>
+      <p style="font-size:0.78rem;color:#aaa;margin-top:1rem;">🥗 Lunch Specials available Mon–Sat 11AM–2PM</p>
+    </div>
+    <div class="hours-card">
+      <h3>📍 Location &amp; Contact</h3>
+      <div class="contact-info">
+        <a href="https://maps.google.com/?q=9770+AL-69+S,+Tuscaloosa,+AL+35405" target="_blank"><span>📍</span> 9770 AL-69 S, Tuscaloosa, AL 35405</a>
+        <a href="tel:2053458871"><span>📞</span> (205) 345-8871</a>
+        <a href="https://www.facebook.com/lagranfiestabarandgrill/" target="_blank"><span>💬</span> Message us on Facebook</a>
+      </div>
+      <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.1);">
+        <p style="font-size:0.8rem;color:#bbb;line-height:1.6;">💳 A 3% card processing fee applies. Cash always welcome!</p>
+      </div>
+    </div>
+    <div class="hours-card">
+      <h3>🚗 Order &amp; Delivery</h3>
+      <p style="font-size:0.88rem;color:#ccc;margin-bottom:1.2rem;line-height:1.6;">Dine-in, carryout, and delivery available. Online ordering daily 11AM–9PM.</p>
+      <a href="https://order.online/en-US/store/la-gran-fiesta-mexican-restaurant-highway-69-24533493" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:0.7rem;">Order Online</a>
+      <a href="https://www.doordash.com/store/la-gran-fiesta-mexican-restaurant-tuscaloosa-24533493/" target="_blank" class="btn btn-outline" style="width:100%;justify-content:center;font-size:0.82rem;">DoorDash Delivery</a>
+    </div>
+  </div>
+</section>
+
+<section id="specials">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <div class="section-label">Don't Miss Out</div>
+    <h2 class="section-title">Weekly <em>Specials</em></h2>
+    <div class="divider center"></div>
+    <p style="max-width:520px;margin:0 auto;color:var(--muted);font-size:0.9rem;">From Monday margaritas to all-day Saturday happy hour, there's always a reason to celebrate!</p>
+  </div>
+  <div class="specials-grid">
+    <div class="special-card">
+      <div class="special-head"><div class="special-day">Monday</div><div class="special-emoji">🍹</div></div>
+      <div class="special-body"><h3>Margarita Monday</h3><p>Start your week right! House margaritas on the rocks or frozen at a special price.</p><span class="special-discount">$1 OFF HOUSE MARGARITAS</span></div>
+    </div>
+    <div class="special-card green">
+      <div class="special-head"><div class="special-day">Tuesday</div><div class="special-emoji">🌮</div></div>
+      <div class="special-body"><h3>Taco Tuesday</h3><p>Enjoy crispy beef or seasoned chicken tacos at a discounted price all day long.</p><span class="special-discount">$1.25 TACOS ALL DAY</span></div>
+    </div>
+    <div class="special-card gold">
+      <div class="special-head"><div class="special-day">Wednesday</div><div class="special-emoji">🧀</div></div>
+      <div class="special-body"><h3>Cheese Dip Wednesday</h3><p>Our famous warm white queso — the one everyone keeps coming back for — at a reduced price!</p><span class="special-discount">HALF-OFF CHEESE DIP</span></div>
+    </div>
+    <div class="special-card brown">
+      <div class="special-head"><div class="special-day">Thursday</div><div class="special-emoji">🍺</div></div>
+      <div class="special-body"><h3>Thirsty Thursday</h3><p>Domestic drafts and imported Mexican beers — Corona, Dos Equis, Tecate &amp; more — at special pricing.</p><span class="special-discount">DISCOUNTED BEER PITCHERS</span></div>
+    </div>
+    <div class="special-card">
+      <div class="special-head"><div class="special-day">Friday</div><div class="special-emoji">🎉</div></div>
+      <div class="special-body"><h3>Friday Fiesta Night</h3><p>Kick off the weekend! Happy hour 4–7 PM with discounted margaritas, nachos &amp; our fiesta platter.</p><span class="special-discount">HAPPY HOUR 4–7 PM</span></div>
+    </div>
+    <div class="special-card blue">
+      <div class="special-head"><div class="special-day">Saturday</div><div class="special-emoji">☀️</div></div>
+      <div class="special-body"><h3>All-Day Happy Hour!</h3><p>Saturday happy hour runs ALL DAY LONG. Huge margaritas, cold beers, and great food from open to close!</p><span class="special-discount">HAPPY HOUR ALL DAY SAT</span></div>
+    </div>
+    <div class="special-card green">
+      <div class="special-head"><div class="special-day">Mon – Sat</div><div class="special-emoji">🍽️</div></div>
+      <div class="special-body"><h3>Lunch Specials</h3><p>Combination plates with rice &amp; beans at our best midday prices. Every Monday through Saturday.</p><span class="special-discount">11 AM – 2 PM DAILY</span></div>
+    </div>
+    <div class="special-card">
+      <div class="special-head"><div class="special-day">Sunday</div><div class="special-emoji">👨‍👩‍👧‍👦</div></div>
+      <div class="special-body"><h3>Kids Eat Free</h3><p>Children under 10 eat FREE with a paying adult every Sunday. A family tradition at La Gran Fiesta!</p><span class="special-discount">KIDS UNDER 10 · SUNDAYS</span></div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:2rem;font-size:0.78rem;color:var(--muted);">*Specials subject to change. Call <a href="tel:2053458871" style="color:var(--red);">(205) 345-8871</a> or check our <a href="https://www.facebook.com/lagranfiestabarandgrill/" target="_blank" style="color:var(--red);">Facebook</a> for latest updates.</p>
+</section>
+
+<section id="gallery">
+  <div style="text-align:center;margin-bottom:2.5rem;">
+    <div class="section-label">¡Que Rico!</div>
+    <h2 class="section-title">Food <em>Gallery</em></h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item tall">
+      <img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=600&q=80" alt="Sizzling fajitas" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">Sizzling Fajitas Tradicionales</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Street tacos" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">Traditional Street Tacos</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=600&q=80" alt="Margaritas" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">Fresh Margaritas</span></div>
+    </div>
+    <div class="gallery-item wide">
+      <img src="https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=900&q=80" alt="Nachos and queso" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">Nachos La Gran Fiesta &amp; Famous Cheese Dip</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?w=600&q=80" alt="Enchiladas" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">Enchiladas Rancheras</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1615870216519-2f9fa575fa5c?w=600&q=80" alt="Guacamole" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">Fresh Guacamole</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80" alt="Burrito" loading="lazy" />
+      <div class="overlay"><span class="overlay-text">La Gran Chimichanga Dinner</span></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:2rem;">
+    <a href="https://www.instagram.com/lagranfiestattown/" target="_blank" class="btn btn-outline" style="color:#fff;border-color:var(--gold);">See More on Instagram 📸</a>
+  </div>
+</section>
+
+<section id="menu">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <div class="section-label">What We Serve</div>
+    <h2 class="section-title">Our Full <em>Menu</em></h2>
+    <div class="divider center"></div>
+    <p style="max-width:520px;margin:0 auto;color:var(--muted);font-size:0.88rem;">All combination plates served with rice &amp; beans. No substitutions please. Prices may vary.</p>
+  </div>
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="showMenu('starters',this)">Starters</button>
+    <button class="menu-tab" onclick="showMenu('chicken',this)">Chicken</button>
+    <button class="menu-tab" onclick="showMenu('specialties',this)">Specialties</button>
+    <button class="menu-tab" onclick="showMenu('combinations',this)">Combinations</button>
+    <button class="menu-tab" onclick="showMenu('seafood',this)">Seafood</button>
+    <button class="menu-tab" onclick="showMenu('salads',this)">Salads</button>
+    <button class="menu-tab" onclick="showMenu('drinks',this)">Drinks</button>
+    <button class="menu-tab" onclick="showMenu('kids',this)">Kids</button>
+    <button class="menu-tab" onclick="showMenu('desserts',this)">Desserts</button>
+  </div>
+
+  <div class="menu-panel active" id="panel-starters">
+    <div class="menu-section-title">🧀 Starters &amp; Appetizers</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cheese Dip ⭐</div><div class="item-desc">Our famous warm white melted queso — a Tuscaloosa favorite!</div></div><div class="item-price">$5.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Nachos with Beans</div></div><div class="item-price">$3.75+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Nachos with Beef</div></div><div class="item-price">$4.00+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Nachos with Beef &amp; Beans</div></div><div class="item-price">$4.25+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Nachos La Gran Fiesta</div><div class="item-desc">Beef or chicken · cheese, lettuce, tomato, sour cream &amp; jalapeño</div></div><div class="item-price">$5.50+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Nacho Fajita</div><div class="item-desc">Chicken or steak · smothered in cheese sauce</div></div><div class="item-price">$6.75+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Jalapeño de Queso</div><div class="item-desc">Half dozen peppers stuffed with cream cheese</div></div><div class="item-price">$4.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Fingers</div><div class="item-desc">Half dozen tenders served with cheese sauce</div></div><div class="item-price">$5.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Bean Dip</div></div><div class="item-price">$2.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Guacamole Dip</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cheese Sticks</div></div><div class="item-price">$5.25</div></div>
+    </div>
+    <div class="menu-section-title">🧾 À La Carte</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Taco (Beef or Chicken)</div></div><div class="item-price">$1.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Enchilada</div></div><div class="item-price">$2.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chile Con Carne</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chile Relleno</div></div><div class="item-price">$2.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chalupa</div></div><div class="item-price">$2.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chimi Changa</div></div><div class="item-price">$5.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Flauta</div></div><div class="item-price">$2.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tamale</div></div><div class="item-price">$2.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Burrito (Beef or Chicken)</div></div><div class="item-price">$3.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Quesadilla – Cheese &amp; Onion</div></div><div class="item-price">$2.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Quesadilla – Chicken &amp; Cheese</div></div><div class="item-price">$3.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Quesadilla – Beef &amp; Cheese</div></div><div class="item-price">$3.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Beef Tostada</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Spanish Rice</div></div><div class="item-price">$2.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Refried Beans</div></div><div class="item-price">$2.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Flour Tortillas</div></div><div class="item-price">$1.25</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-chicken">
+    <div class="menu-section-title">🍗 Platos de Pollo <span class="badge">No Substitutions</span></div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Two Chicken Quesadillas</div><div class="item-desc">Served with lettuce, tomatoes &amp; sour cream</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mexican Chicken Fingers</div><div class="item-desc">Chicken tenders topped with cheese · rice &amp; beans</div></div><div class="item-price">$7.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">La Gran Chimichanga Dinner ⭐</div><div class="item-desc">Fried burrito · cheese, tomatoes, lettuce &amp; sour cream · rice &amp; beans</div></div><div class="item-price">$8.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Enchiladas Verdes</div><div class="item-desc">Two chicken enchiladas · green sauce &amp; sour cream · rice &amp; beans</div></div><div class="item-price">$7.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Tacos</div><div class="item-desc">Three chicken tacos topped with cheese &amp; lettuce</div></div><div class="item-price">$5.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Enchiladas</div><div class="item-desc">Three chicken enchiladas · guacamole salad</div></div><div class="item-price">$6.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Burrito Deluxe</div><div class="item-desc">Two chicken &amp; bean burritos · cheese, lettuce, tomatoes &amp; sour cream</div></div><div class="item-price">$7.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Flautas Mexicanas</div><div class="item-desc">Served with lettuce, tomatoes &amp; sour cream</div></div><div class="item-price">$7.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Pollo a La Parrilla</div><div class="item-desc">Grilled chicken breast · rice &amp; beans</div></div><div class="item-price">$8.50</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-specialties">
+    <div class="menu-section-title">⭐ La Gran Fiesta Specialties</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Fajitas Tradicionales ⭐</div><div class="item-desc">Sizzling strips of steak or chicken · bell peppers, onions &amp; tomatoes · rice, beans, lettuce, sour cream &amp; tortillas</div></div><div class="item-price">$19.00+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">La Gran Fajitas</div><div class="item-desc">Steak, chicken &amp; shrimp · bell peppers &amp; onions · rice, beans, lettuce, sour cream &amp; tortillas</div></div><div class="item-price">$22.00+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Carne a La Tampiquena</div><div class="item-desc">8 oz. rib eye · one cheese enchilada · rice &amp; beans</div></div><div class="item-price">$10.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Bistec a La Mexicana</div><div class="item-desc">Steak with onions, jalapeños &amp; tomatoes · rice, beans &amp; guacamole salad</div></div><div class="item-price">$9.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Carne San Luis</div><div class="item-desc">Grilled ribeye · beans, sliced avocados, lettuce &amp; flour tortillas</div></div><div class="item-price">$11.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Bistec Estilo Jalisco</div><div class="item-desc">Grilled 8 oz. ribeye · salsa ranchera · rice, beans &amp; flour tortillas</div></div><div class="item-price">$11.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tacos al Carbon</div><div class="item-desc">Grilled steak in corn or flour tortillas · rice &amp; pico de gallo</div></div><div class="item-price">$8.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Burritos San Luis</div><div class="item-desc">Two burritos · Mexican stew, cheese sauce, lettuce &amp; sour cream</div></div><div class="item-price">$8.00</div></div>
+    </div>
+    <div class="menu-section-title">🌯 Mexican Dishes</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Enchiladas Rancheras</div><div class="item-desc">Four beef enchiladas · melted cheese, lettuce, tomatoes &amp; sour cream</div></div><div class="item-price">$7.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Enchilada Supreme</div><div class="item-desc">Chicken, cheese, bean &amp; beef enchilada · cheese, lettuce &amp; sour cream</div></div><div class="item-price">$8.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chiles Rellenos</div><div class="item-desc">Two chiles rellenos &amp; guacamole salad</div></div><div class="item-price">$6.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Enchilada Dinner</div><div class="item-desc">Two beef enchiladas · rice &amp; beans</div></div><div class="item-price">$6.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mexican Dinner</div><div class="item-desc">One beef enchilada, one beef taco · rice, beans &amp; guacamole salad</div></div><div class="item-price">$8.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Plato La Gran Fiesta</div><div class="item-desc">Chile relleno, beef tostada, beef enchilada, beef taco &amp; burrito</div></div><div class="item-price">$10.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Beef Tacos</div><div class="item-desc">Three beef tacos · lettuce &amp; cheese</div></div><div class="item-price">$5.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Flautas</div><div class="item-desc">Four steak flautas · guacamole salad</div></div><div class="item-price">$6.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Golden Enchiladas</div><div class="item-desc">Three fried enchiladas (beef or chicken) · cheese sauce, lettuce, sour cream &amp; salsa ranchera</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Hot &amp; Spicy Burrito 🌶</div><div class="item-desc">Flour tortilla · rice, beans, beef, cheese, chile con carne &amp; sour cream. Try if you dare!</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Gran Quesadilla</div><div class="item-desc">Rice, beans, lettuce, sour cream &amp; salsa ranchera</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Quesadilla Special</div><div class="item-desc">Two grilled steak, bell pepper &amp; onion quesadillas · lettuce, tomatoes &amp; sour cream</div></div><div class="item-price">$8.50</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-combinations">
+    <div class="menu-section-title">🍽️ Combinations <span class="badge">Served with Rice &amp; Beans · No Substitutions</span></div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Beef Taco, Rice &amp; Beef Enchilada</div><div class="item-desc">Refried beans with melted cheese</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Chile Relleno, Rice &amp; Refried Beans</div><div class="item-desc">With melted cheese</div></div><div class="item-price">$6.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Chalupa, Cheese Taco, Beef Taco &amp; Beef Enchilada</div></div><div class="item-price">$7.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Beef Taco, Beef Enchilada &amp; Beef Burrito</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chile Relleno, Beef Taco, Beef Enchilada, Rice &amp; Refried Beans</div></div><div class="item-price">$8.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Two Tamales, Cheese Enchilada, Rice &amp; Refried Beans</div></div><div class="item-price">$7.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Two Beef Enchiladas, One Tamale &amp; One Beef Taco</div></div><div class="item-price">$7.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Guacamole Tostada, Spanish Rice, Beef Enchilada &amp; Refried Beans</div></div><div class="item-price">$7.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chile Con Carne, Two Tamales, Rice &amp; Refried Beans</div></div><div class="item-price">$7.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Burrito, Rice &amp; Refried Beans</div></div><div class="item-price">$6.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Burrito, One Chalupa, One Beef Taco &amp; Beef Enchilada</div></div><div class="item-price">$8.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Burrito, One Flauta &amp; One Beef Tostada</div></div><div class="item-price">$7.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">One Chicken Burrito, Shrimp Enchilada, Rice or Beans</div></div><div class="item-price">$7.50</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-seafood">
+    <div class="menu-section-title">🦐 Seafood Dishes</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Shrimp Fajitas</div><div class="item-desc">Sizzling shrimp · bell pepper, onions &amp; tomatoes · rice, beans, sour cream &amp; tortillas</div></div><div class="item-price">$19.50+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">La Gran Fiesta Shrimp Quesadillas</div><div class="item-desc">Two shrimp quesadillas · lettuce, sour cream &amp; salsa ranchera</div></div><div class="item-price">$8.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Shrimp Flautas</div><div class="item-desc">Three shrimp taquitos · lettuce, sour cream, rice, beans &amp; salsa ranchera</div></div><div class="item-price">$8.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Shrimp Enchiladas</div><div class="item-desc">Two enchiladas · Mexican-style shrimp · rice &amp; beans</div></div><div class="item-price">$8.75</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Shrimp Burrito</div><div class="item-desc">Flour tortilla · lettuce, tomatoes &amp; sour cream · your choice of salsa</div></div><div class="item-price">$8.50</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-salads">
+    <div class="menu-section-title">🥗 Salads</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tossed Salad</div><div class="item-desc">1000 Island, Italian, or Ranch</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Guacamole Salad</div></div><div class="item-price">$4.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">La Gran Fiesta Salad</div><div class="item-desc">Beef or chicken · lettuce, tomatoes &amp; sour cream</div></div><div class="item-price">$7.00+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Taco Salad</div></div><div class="item-price">$7.00+</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">La Gran Fajita Salad ⭐</div><div class="item-desc">Steak or chicken on a bed of lettuce · cheese sauce &amp; tomatoes</div></div><div class="item-price">$15.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tostada Compuesta</div><div class="item-desc">Flour tortilla · beans, beef, lettuce, tomatoes &amp; cheese</div></div><div class="item-price">$7.00+</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-drinks">
+    <div class="menu-section-title">🍹 Cocktails &amp; Margaritas</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">House Margarita ⭐</div><div class="item-desc">On the rocks or frozen — ask your server for today's flavors!</div></div><div class="item-price">Ask Server</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mixed Drinks</div></div><div class="item-price">$4.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Sangria</div></div><div class="item-price">$2.50/glass</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chardonnay</div></div><div class="item-price">$2.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">White Zinfandel</div></div><div class="item-price">$2.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Burgundy</div></div><div class="item-price">$2.50</div></div>
+    </div>
+    <div class="menu-section-title">🍺 Beer</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Corona</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tecate</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Dos Equis</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Sol</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Carta Blanca</div></div><div class="item-price">$3.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Domestic Beer</div></div><div class="item-price">$2.50</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Pitcher of Beer</div></div><div class="item-price">$6.00</div></div>
+    </div>
+    <div class="menu-section-title">🥤 Non-Alcoholic</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Coke / Diet Coke</div></div><div class="item-price">$1.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Lemonade</div></div><div class="item-price">$1.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mellow Yellow</div></div><div class="item-price">$1.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mr. Pibb</div></div><div class="item-price">$1.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Coffee</div></div><div class="item-price">$1.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tea</div></div><div class="item-price">$1.00</div></div>
+    </div>
+  </div>
+
+  <div class="menu-panel" id="panel-kids">
+    <div class="menu-section-title">👦 Kids Menu <span class="badge">Children Under 10 Only</span></div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Beef Taco, Rice &amp; Beans</div></div><div class="item-price">$3.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Burrito with Enchilada Sauce, Rice &amp; Beans</div></div><div class="item-price">$3.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Beef Enchiladas, Rice &amp; Beans</div></div><div class="item-price">$3.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cheese Quesadilla, Rice &amp; Beans</div></div><div class="item-price">$3.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Fingers with Fries</div></div><div class="item-price">$4.75</div></div>
+    </div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-top:1.5rem;font-style:italic;">🎉 Every Sunday, kids under 10 eat FREE with a paying adult!</p>
+  </div>
+
+  <div class="menu-panel" id="panel-desserts">
+    <div class="menu-section-title">🍮 Desserts</div>
+    <div class="menu-items">
+      <div class="menu-item"><div class="item-info"><div class="item-name">Sopapilla</div><div class="item-desc">Warm, fluffy fried dough with honey</div></div><div class="item-price">$1.00</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Flan</div><div class="item-desc">Classic Mexican caramel custard</div></div><div class="item-price">$2.25</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Fried Ice Cream</div><div class="item-desc">Crispy outside, cool and creamy inside</div></div><div class="item-price">$2.50</div></div>
+    </div>
+  </div>
+
+  <div class="menu-note">⚠️ Menu items and prices are subject to change. Please call <strong>(205) 345-8871</strong> for current pricing and daily specials.</div>
+  <div class="menu-cta-row">
+    <a href="https://order.online/en-US/store/la-gran-fiesta-mexican-restaurant-highway-69-24533493" target="_blank" class="btn btn-primary" style="font-size:1rem;padding:16px 36px;">Order Online Now 🌮</a>
+  </div>
+</section>
+
+<section id="reviews">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <div class="section-label">What People Are Saying</div>
+    <h2 class="section-title">Guest <em>Reviews</em></h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"We just moved from New Orleans and have definitely found our new Mexican restaurant! The margaritas are delicious — not that bright green Kool-Aid kind. The staff always greet us and our kids like family."</p>
+      <div class="review-author">Sarah M.</div><div class="review-source">Google Review</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"La Gran is the best Mexican in Tuscaloosa. Never fails to disappoint. The traditional tacos and the fried burrito are both excellent. In my opinion it's the best in town — and I'm from Cali!"</p>
+      <div class="review-author">James R.</div><div class="review-source">Yelp Review</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Saturday had happy hour for the whole day! The margaritas were HUGE! The Birria nachos are my new favorite. Make sure to have the pico de gallo grilled — it brings out all the flavors."</p>
+      <div class="review-author">Marcus T.</div><div class="review-source">DoorDash Review</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★☆</div>
+      <p class="review-text">"The Fajita Chimichanga Dinner arrived hot. I love the combo with steak and chicken. They always give you plenty of rice, beans and all the fixings. Great value for the price."</p>
+      <div class="review-author">Diane K.</div><div class="review-source">Google Review</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem;">
+    <a href="https://www.google.com/maps/search/La+Gran+Fiesta+Tuscaloosa+AL" target="_blank" class="btn btn-outline" style="border-color:var(--red);color:var(--red);">Leave Us a Google Review ⭐</a>
+  </div>
+</section>
+
+<section id="find-us">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <div class="section-label">We're Easy to Find</div>
+    <h2 class="section-title">Come Visit <em>Us</em></h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="find-grid">
+    <div class="map-embed">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.058553!2d-87.5714447!3d33.2045517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x888f1d1e16c0d9d9%3A0x9f7e3ec8de70edca!2sLa%20Gran%20Fiesta%20Mexican%20Restaurant!5e0!3m2!1sen!2sus!4v1716560000000!5m2!1sen!2sus" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="La Gran Fiesta map"></iframe>
+    </div>
+    <div class="find-info">
+      <div class="section-label" style="margin-top:0;">Address</div>
+      <h3 style="margin-top:0.3rem;">9770 AL-69 S<br>Tuscaloosa, AL 35405</h3>
+      <p><a href="https://maps.google.com/?q=La+Gran+Fiesta+Mexican+Restaurant+Tuscaloosa+AL" target="_blank" style="color:var(--red);">Get Directions →</a></p>
+      <h3>Phone</h3>
+      <p><a href="tel:2053458871">(205) 345-8871</a></p>
+      <h3>Follow &amp; Connect</h3>
+      <div class="social-row">
+        <a href="https://www.facebook.com/lagranfiestabarandgrill/" target="_blank" class="social-btn social-fb">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </a>
+        <a href="https://www.instagram.com/lagranfiestattown/" target="_blank" class="social-btn social-ig">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          Instagram
+        </a>
+      </div>
+      <div class="order-btns">
+        <a href="https://www.doordash.com/store/la-gran-fiesta-mexican-restaurant-tuscaloosa-24533493/" target="_blank" class="social-btn social-dd">🚗 DoorDash</a>
+        <a href="https://www.yelp.com/biz/la-gran-fiesta-mexican-restaurant-tuscaloosa" target="_blank" class="social-btn social-yelp">⭐ Yelp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>La Gran Fiesta Mexican Restaurant</strong>
+  <p>9770 AL-69 S, Tuscaloosa, AL 35405 · <a href="tel:2053458871">(205) 345-8871</a></p>
+  <div class="footer-social">
+    <a href="https://www.facebook.com/lagranfiestabarandgrill/" target="_blank" title="Facebook">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/lagranfiestattown/" target="_blank" title="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://www.doordash.com/store/la-gran-fiesta-mexican-restaurant-tuscaloosa-24533493/" target="_blank" title="DoorDash">🚗</a>
+    <a href="https://www.yelp.com/biz/la-gran-fiesta-mexican-restaurant-tuscaloosa" target="_blank" title="Yelp">⭐</a>
+  </div>
+  <p style="font-size:0.72rem;color:#555;">Mon–Thu 11AM–9:30PM · Fri–Sat 11AM–10PM · Sun 11AM–9PM</p>
+  <p style="font-size:0.7rem;color:#444;margin-top:0.5rem;">© 2026 La Gran Fiesta Mexican Restaurant · All Rights Reserved · Tuscaloosa, AL</p>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+
+  function showMenu(id, btn) {
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  const today = days[new Date().getDay()];
+  document.querySelectorAll('.hours-row[data-day]').forEach(row => {
+    if (row.dataset.day === today) row.classList.add('today');
+  });
+</script>
+</body>
+</html>
