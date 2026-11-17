@@ -81,7 +81,7 @@ section{padding:6rem 2rem}
 
 /* SPECIALS */
 #specials{background:var(--surface)}
-.specials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5px;background:var(--divider);border:1px solid var(--divider)}
+.specials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5px;background:var(--divider);border:1px solid var(--divider)}
 .special-card{background:var(--card);padding:2rem 1.8rem;position:relative;overflow:hidden;transition:background 0.3s}
 .special-card:hover{background:#2a1f14}
 .special-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transition:transform 0.3s;transform-origin:left}
@@ -90,6 +90,13 @@ section{padding:6rem 2rem}
 .special-name{font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--cream);margin-bottom:0.5rem;line-height:1.2}
 .special-desc{font-family:var(--font-body);font-size:0.9rem;font-style:italic;color:var(--cream-dim);line-height:1.6}
 .special-tag{display:inline-block;margin-top:0.8rem;font-family:var(--font-ui);font-size:0.58rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--ember);border:1px solid var(--ember-dark);padding:0.2rem 0.7rem}
+.special-meal{margin-top:1rem}
+.special-meal+.special-meal{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--divider)}
+.special-meal-label{font-family:var(--font-ui);font-size:0.58rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--ember);margin-bottom:0.45rem}
+.special-item{display:flex;justify-content:space-between;align-items:baseline;gap:0.8rem;padding:0.22rem 0}
+.special-item .si-name{font-family:var(--font-body);font-size:1rem;color:var(--cream);line-height:1.35}
+.special-item .si-name small{display:block;font-size:0.82rem;font-style:italic;color:var(--cream-dim)}
+.special-item .si-price{font-family:var(--font-display);font-size:0.95rem;font-weight:600;color:var(--gold-light);white-space:nowrap}
 
 /* MENU */
 #menu{background:var(--dark)}
@@ -274,46 +281,90 @@ footer{background:var(--ink);padding:4rem 2rem 2rem;border-top:1px solid var(--d
 <section id="specials">
   <div class="container">
     <p class="section-label" style="text-align:center">Weekly Specials</p>
-    <h2 class="section-title" style="text-align:center">Something Special Every Day</h2>
+    <h2 class="section-title" style="text-align:center">Lunch &amp; Dinner Deals Every Day</h2>
     <div class="section-rule" style="justify-content:center;margin-bottom:2.5rem">
       <div class="sr-line"></div><div class="sr-diamond"></div><div class="sr-line"></div>
     </div>
     <div class="specials-grid">
       <div class="special-card">
         <div class="special-day">Monday</div>
-        <div class="special-name">Margarita Monday</div>
-        <div class="special-desc">House margaritas at a special price — frozen or on the rocks, traditional or flavored. Start your week the Patrón way.</div>
-        <span class="special-tag">All Day</span>
+        <div class="special-name">Fajita Monday</div>
+        <div class="special-meal">
+          <div class="special-meal-label">Lunch · 11 AM – 3 PM</div>
+          <div class="special-item"><div class="si-name">#20 Fajita Salad<small>Steak or chicken</small></div><div class="si-price">$10.00</div></div>
+          <div class="special-item"><div class="si-name">#22 Sizzling Fajitas<small>Steak or chicken</small></div><div class="si-price">$10.00</div></div>
+        </div>
+        <div class="special-meal">
+          <div class="special-meal-label">Dinner</div>
+          <div class="special-item"><div class="si-name">Fajitas for One<small>#54 Chicken Fajitas or #64 Steak Fajitas</small></div><div class="si-price">$13.00</div></div>
+          <div class="special-item"><div class="si-name">Fajitas for Two<small>#54 Chicken Fajitas or #64 Steak Fajitas</small></div><div class="si-price">$25.00</div></div>
+        </div>
       </div>
       <div class="special-card">
         <div class="special-day">Tuesday</div>
         <div class="special-name">Taco Tuesday</div>
-        <div class="special-desc">Mexican street tacos at a deal — steak, chicken, carnitas, chorizo, al pastor, shrimp, fish, or ribeye on corn tortillas with cilantro and onion.</div>
-        <span class="special-tag">All Day</span>
+        <div class="special-meal">
+          <div class="special-meal-label">Lunch · 11 AM – 3 PM</div>
+          <div class="special-item"><div class="si-name">Hard Shell Tacos<small>Beef or chicken</small></div><div class="si-price">$2.00</div></div>
+          <div class="special-item"><div class="si-name">#17 Taco Salad</div><div class="si-price">$7.99</div></div>
+        </div>
+        <div class="special-meal">
+          <div class="special-meal-label">Dinner</div>
+          <div class="special-item"><div class="si-name">Hard Shell Tacos<small>Beef or chicken</small></div><div class="si-price">$2.00</div></div>
+          <div class="special-item"><div class="si-name">#13 Taco Salad</div><div class="si-price">$10.00</div></div>
+        </div>
       </div>
       <div class="special-card">
         <div class="special-day">Wednesday</div>
-        <div class="special-name">Wine &amp; Dine Wednesday</div>
-        <div class="special-desc">Enjoy a glass of house wine — Sangria, Chardonnay, Pinot Grigio, White Zinfandel, or Merlot — with any entrée.</div>
-        <span class="special-tag">Dine-In Only</span>
+        <div class="special-name">Enchilada Wednesday</div>
+        <div class="special-meal">
+          <div class="special-meal-label">Lunch · 11 AM – 3 PM</div>
+          <div class="special-item"><div class="si-name">#7 Enchilada Lunch</div><div class="si-price">$7.99</div></div>
+          <div class="special-item"><div class="si-name">#26 Enchiladas Verdes</div><div class="si-price">$7.99</div></div>
+        </div>
+        <div class="special-meal">
+          <div class="special-meal-label">Dinner</div>
+          <div class="special-item"><div class="si-name">#55 Enchilada Dinner</div><div class="si-price">$10.00</div></div>
+          <div class="special-item"><div class="si-name">#39 Enchiladas Verdes</div><div class="si-price">$10.00</div></div>
+        </div>
       </div>
       <div class="special-card">
         <div class="special-day">Thursday</div>
-        <div class="special-name">Quesabirria Thursday</div>
-        <div class="special-desc">Our Quesabirria Tacos (3) — shredded beef birria with melted cheese on corn tortillas, topped with cilantro and onion, served with consomé and rice.</div>
-        <span class="special-tag">While Supplies Last</span>
+        <div class="special-name">Burrito Thursday</div>
+        <div class="special-meal">
+          <div class="special-meal-label">Lunch · 11 AM – 3 PM</div>
+          <div class="special-item"><div class="si-name">#2 Burrito Special</div><div class="si-price">$9.00</div></div>
+          <div class="special-item"><div class="si-name">#6 Burrito Lunch</div><div class="si-price">$7.99</div></div>
+        </div>
+        <div class="special-meal">
+          <div class="special-meal-label">Dinner</div>
+          <div class="special-item"><div class="si-name">Combo G — Burrito with Rice &amp; Beans</div><div class="si-price">$10.00</div></div>
+          <div class="special-item"><div class="si-name">#29 Burrito Patrón</div><div class="si-price">$13.00</div></div>
+        </div>
       </div>
       <div class="special-card">
-        <div class="special-day">Friday &amp; Saturday</div>
-        <div class="special-name">Weekend Fiesta</div>
-        <div class="special-desc">We're open late until 10:30 PM with the full bar firing on all cylinders. Bring the crew, grab a Patrón Pitcher, and make a night of it.</div>
-        <span class="special-tag">Open Until 10:30 PM</span>
+        <div class="special-day">Friday</div>
+        <div class="special-name">Friday Favorites</div>
+        <div class="special-meal">
+          <div class="special-meal-label">Lunch · 11 AM – 3 PM</div>
+          <div class="special-item"><div class="si-name">#28 Chicken Fingers</div><div class="si-price">$9.00</div></div>
+          <div class="special-item"><div class="si-name">#29 Grilled Chicken Lunch</div><div class="si-price">$9.00</div></div>
+        </div>
+        <div class="special-meal">
+          <div class="special-meal-label">Dinner</div>
+          <div class="special-item"><div class="si-name">Chicken Fingers (6)</div><div class="si-price">$8.00</div></div>
+          <div class="special-item"><div class="si-name">#65 Steak and Rice</div><div class="si-price">$12.00</div></div>
+        </div>
       </div>
       <div class="special-card">
-        <div class="special-day">Saturday &amp; Sunday</div>
-        <div class="special-name">Weekend Soups</div>
-        <div class="special-desc">Our authentic Menudo and Caldo de Res are only available on weekends. A true Mexican tradition, available only while supplies last.</div>
-        <span class="special-tag">Weekends Only</span>
+        <div class="special-day">Saturday</div>
+        <div class="special-name">Nacho Saturday</div>
+        <div class="special-meal">
+          <div class="special-meal-label">All Day</div>
+          <div class="special-item"><div class="si-name">Nachos al Patrón — Half Order</div><div class="si-price">$7.99</div></div>
+          <div class="special-item"><div class="si-name">Nachos al Patrón — Full Order</div><div class="si-price">$10.00</div></div>
+        </div>
+        <span class="special-tag">All Day</span>
       </div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;margin-top:2rem;gap:0.4rem">
